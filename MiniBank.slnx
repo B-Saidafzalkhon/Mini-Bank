@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MiniBank.Api/MiniBank.Api.csproj" />
+  </Folder>
+</Solution>
