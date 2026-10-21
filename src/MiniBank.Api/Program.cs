@@ -1,4 +1,8 @@
+using MiniBank.Api.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

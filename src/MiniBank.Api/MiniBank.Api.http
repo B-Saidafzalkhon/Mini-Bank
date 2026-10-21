@@ -1,6 +1,22 @@
 @MiniBank.Api_HostAddress = http://localhost:5293
+@host = {{MiniBank.Api_HostAddress}}
+### 1. Создать счёт
+POST {{host}}/api/accounts
+Content-Type: application/json
 
-GET {{MiniBank.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+{
+  "ownerName": "Invain",
+  "currency": "eur"
+}
 
-###
+### 2. Список
+GET {{host}}/api/accounts
+
+### 3. По id (вставь id из ответа №1)
+GET {{host}}/api/accounts/ВСТАВЬ-ID
+
+### 4. Несуществующий
+GET {{host}}/api/accounts/00000000-0000-0000-0000-000000000000
+
+### 5. Не guid
+GET {{host}}/api/accounts/abc
