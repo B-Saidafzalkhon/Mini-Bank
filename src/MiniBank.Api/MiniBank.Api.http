@@ -12,11 +12,41 @@ Content-Type: application/json
 ### 2. Список
 GET {{host}}/api/accounts
 
-### 3. По id (вставь id из ответа №1)
-GET {{host}}/api/accounts/ВСТАВЬ-ID
+### 3. По id 
+GET {{host}}/api/accounts/ce70b3c9-1d50-49ff-94a4-24f26217487d
 
 ### 4. Несуществующий
 GET {{host}}/api/accounts/00000000-0000-0000-0000-000000000000
 
 ### 5. Не guid
 GET {{host}}/api/accounts/abc
+
+### 6. Депозит 100
+POST {{host}}/api/accounts/ce70b3c9-1d50-49ff-94a4-24f26217487d/deposit
+Content-Type: application/json
+
+{ "amount": 100 }
+
+### 7. Снять 30
+POST {{host}}/api/accounts/ce70b3c9-1d50-49ff-94a4-24f26217487d/withdraw
+Content-Type: application/json
+
+{ "amount": 30 }
+
+### 8. Снять больше, чем есть
+POST {{host}}/api/accounts/ce70b3c9-1d50-49ff-94a4-24f26217487d/withdraw
+Content-Type: application/json
+
+{ "amount": 1000 }
+
+### 9. Отрицательная сумма
+POST {{host}}/api/accounts/ce70b3c9-1d50-49ff-94a4-24f26217487d/deposit
+Content-Type: application/json
+
+{ "amount": -5 }
+
+### 10. Депозит на несуществующий счёт
+POST {{host}}/api/accounts/00000000-0000-0000-0000-000000000000/deposit
+Content-Type: application/json
+
+{ "amount": 10 }
