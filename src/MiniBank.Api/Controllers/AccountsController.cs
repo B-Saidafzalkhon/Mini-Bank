@@ -46,12 +46,6 @@ namespace MiniBank.Api.Controllers
         [HttpPost("{id:guid}/deposit")]
         public ActionResult<AccountResponse> Deposit(Guid id, MoneyOperationRequest request)
         {
-            if (request.Amount <= 0)
-                return Problem(
-                    statusCode: StatusCodes.Status400BadRequest,
-                    title: "Invalid amount"
-                    );
-
             var account = _repository.GetById(id);
             if (account is null)
                 return NotFound();
@@ -64,12 +58,6 @@ namespace MiniBank.Api.Controllers
         [HttpPost("{id:guid}/withdraw")]
         public ActionResult<AccountResponse> Withdraw(Guid id, MoneyOperationRequest request)
         {
-            if (request.Amount <= 0)
-                return Problem(
-                   statusCode: StatusCodes.Status400BadRequest,
-                   title: "Invalid amount"
-                   );
-
             var account = _repository.GetById(id);
 
             if (account is null)
