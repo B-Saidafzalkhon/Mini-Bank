@@ -76,12 +76,6 @@ namespace MiniBank.Api.Controllers
         [HttpGet]
         public ActionResult<IReadOnlyList<AccountResponse>> GetAll([FromQuery] AccountFilter filter)
         {
-            if (filter.MinBalance > filter.MaxBalance)
-                return Problem(
-                    statusCode: StatusCodes.Status400BadRequest,
-                    title: "Invalid balance range",
-                    detail: "Min balance cannot be higher than max balance");
-
             IEnumerable<Account> accounts = _repository.GetAll();
 
             if (filter.Currency is not null)
