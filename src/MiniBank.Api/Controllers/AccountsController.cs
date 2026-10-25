@@ -74,7 +74,7 @@ namespace MiniBank.Api.Controllers
                 return Problem(
                    statusCode: StatusCodes.Status400BadRequest,
                    title: "Invalid amount"
-                   );   
+                   );
 
             var account = _repository.GetById(id);
 
@@ -89,6 +89,34 @@ namespace MiniBank.Api.Controllers
 
             account.Balance -= request.Amount;
             return Ok(account.ToResponse());
+        }
+        public ActionResult<IReadOnlyList<AccountResponse>> GetAll([FromQuery] AccountFilter filter)
+        {
+            if (filter.MinBalance > filter.MaxBalance)
+                return Problem(
+                    statusCode: StatusCodes.Status400BadRequest,
+                    title: "Invalid balance range",
+                    detail: "Min balance cannot be higher than max balance");
+
+            IEnumerable<Account> accounts = _repository.GetAll();
+
+            if (filter.Currency is not null)
+            {
+                accounts = accounts.Where(a => a.Currency.Equals(filter.Currency, StringComparison.OrdinalIgnoreCase));
+            }
+            if (filter.Owner is not null)
+            {
+                accounts = accounts.Where(a => a.OwnerName.Contains(filter.Owner, StringComparison.OrdinalIgnoreCase));
+            }
+            if (filter.MinBalance is not null)
+            {
+                accounts = accounts.Where(a => a.Balance >= filter.MinBalance);
+            }
+            if (filter.MaxBalance is not null)
+            {
+                accounts = accounts.Where(a => a.Balance <= filter.MaxBalance);
+            }
+            return Ok(accounts.Select(a => a.ToResponse()).ToList());
         }
     }
 }

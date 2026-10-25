@@ -6,3 +6,4 @@
         public string Currency { get; set; } = string.Empty;
     }
 }
+    

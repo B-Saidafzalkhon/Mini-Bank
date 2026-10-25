@@ -6,6 +6,7 @@ builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
 
@@ -15,6 +16,10 @@ app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "My API v1");
+    });
 }
 
 app.UseHttpsRedirection();
