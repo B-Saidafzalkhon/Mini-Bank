@@ -5,8 +5,8 @@ namespace MiniBank.Api.Contracts
 {
     public class AccountFilter
     {
-        public string? Currency {  get; set; } = string.Empty;
-        public string? Owner {  get; set; } = string.Empty;
+        public string? Currency {  get; set; } 
+        public string? Owner {  get; set; } 
         public decimal? MinBalance { get; set; }
         public decimal? MaxBalance { get; set; }
         

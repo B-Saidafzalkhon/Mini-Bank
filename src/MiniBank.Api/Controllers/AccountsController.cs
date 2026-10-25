@@ -15,12 +15,6 @@ namespace MiniBank.Api.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
-        public ActionResult<IReadOnlyList<AccountResponse>> GetAll()
-        {
-            return Ok(_repository.GetAll().Select(a => a.ToResponse()).ToList());
-        }
-
         [HttpGet("{id:guid}")]
         public ActionResult<AccountResponse> GetAccount(Guid id)
         {
@@ -90,6 +84,8 @@ namespace MiniBank.Api.Controllers
             account.Balance -= request.Amount;
             return Ok(account.ToResponse());
         }
+
+        [HttpGet]
         public ActionResult<IReadOnlyList<AccountResponse>> GetAll([FromQuery] AccountFilter filter)
         {
             if (filter.MinBalance > filter.MaxBalance)
