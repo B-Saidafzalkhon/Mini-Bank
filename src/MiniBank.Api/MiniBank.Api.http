@@ -50,3 +50,9 @@ POST {{host}}/api/accounts/00000000-0000-0000-0000-000000000000/deposit
 Content-Type: application/json
 
 { "amount": 10 }
+
+POST {{host}}/api/accounts/{{accountId}}/deposit
+Content-Type: application/json
+X-Correlation-Id: test-123
+
+{ "amount": 100 }

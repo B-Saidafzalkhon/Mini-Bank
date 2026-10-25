@@ -10,9 +10,11 @@ namespace MiniBank.Api.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountRepository _repository;
-        public AccountsController(IAccountRepository repository)
+        private readonly ILogger<AccountsController> _logger;
+        public AccountsController(IAccountRepository repository, ILogger<AccountsController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         [HttpGet("{id:guid}")]
@@ -21,6 +23,7 @@ namespace MiniBank.Api.Controllers
             var account = _repository.GetById(id);
             if (account is null)
             {
+                _logger.LogInformation("Account {AccountId} not found.", id);
                 return NotFound();
             }
             return Ok(account.ToResponse());
@@ -40,6 +43,7 @@ namespace MiniBank.Api.Controllers
 
             _repository.Add(account);
 
+            _logger.LogInformation("Account {AccountId} created with currency {Currency}", account.Id, account.Currency);
             return CreatedAtAction(nameof(GetAccount), new { id = account.Id }, account.ToResponse());
         }
 
@@ -48,10 +52,14 @@ namespace MiniBank.Api.Controllers
         {
             var account = _repository.GetById(id);
             if (account is null)
+            {
+                _logger.LogInformation("Account {AccountId} not found.", id);
                 return NotFound();
+            }
 
             account.Balance += request.Amount;
 
+            _logger.LogInformation("Deposited {Amount} to account {AccountId}. New balance: {NewBalance}", request.Amount, id, account.Balance);
             return Ok(account.ToResponse());
         }
 
@@ -61,15 +69,23 @@ namespace MiniBank.Api.Controllers
             var account = _repository.GetById(id);
 
             if (account is null)
+            {
+                _logger.LogInformation("Account {AccountId} not found.", id);
                 return NotFound();
+            }
 
             if (account.Balance < request.Amount)
+            {
+                _logger.LogWarning("Not enough money. Account: {AccountId}. Requested: {Requested}, Balance: {Balance}", id, request.Amount, account.Balance);
                 return Problem(
                     statusCode: StatusCodes.Status409Conflict,
                     title: "Insufficient funds"
                     );
+            }
 
             account.Balance -= request.Amount;
+
+            _logger.LogInformation("Withdrew {Amount} from account {AccountId}. New balance: {NewBalance}", request.Amount, id, account.Balance);
             return Ok(account.ToResponse());
         }
 

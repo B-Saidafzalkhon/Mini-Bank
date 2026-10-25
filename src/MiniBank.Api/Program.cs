@@ -1,3 +1,4 @@
+using MiniBank.Api.Middleware;
 using MiniBank.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 app.UseExceptionHandler();
+app.UseCorrelationId();
 
 if (app.Environment.IsDevelopment())
 {
