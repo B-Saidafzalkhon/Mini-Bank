@@ -14,16 +14,14 @@
 
         public async Task InvokeAsync(HttpContext context)
         {
-            string? token = context.Request.Headers["Authorization"];
-            if (string.IsNullOrWhiteSpace(token))
+            string? correlationId = context.Request.Headers[HeaderName];
+            if (string.IsNullOrWhiteSpace(correlationId))
             {
-                token = "default";
+                correlationId = Guid.NewGuid().ToString();
             }
-            context.Response.Headers[HeaderName] = token;
+            context.Response.Headers[HeaderName] = correlationId;
 
-            context.Response.Headers["X-Server-Name"] = "MiniBank";
-
-            using (_logger.BeginScope("UserId: {UserId}", token))
+            using (_logger.BeginScope("CorrelationId: {CorrelationId}", correlationId))
             {
                 await _next(context);
             }
